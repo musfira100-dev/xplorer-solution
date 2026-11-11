@@ -14,6 +14,11 @@ class SiteSettings(models.Model):
         default="Xplorer Solution | Human-Centric Digital Architecture & Tech Solutions",
     )
 
+    logo = models.ImageField("Logo", upload_to="branding/", blank=True, null=True,
+                             help_text="PNG ya SVG, transparent background.")
+    favicon = models.ImageField("Favicon", upload_to="branding/", blank=True, null=True,
+                                help_text="Chhota square icon, PNG 64x64 ya 128x128.")
+
     # Hero
     hero_badge = models.CharField(max_length=80, default="Humanizing Digital Architecture")
     hero_title_prefix = models.CharField(max_length=120, default="Empowering Visionaries With")

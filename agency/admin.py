@@ -45,7 +45,7 @@ class ImagePreviewMixin:
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     fieldsets = (
-        ("Branding", {"fields": ("site_name", "site_suffix", "meta_title")}),
+        ("Branding", {"fields": ("site_name", "site_suffix", "meta_title", "logo", "favicon")}),
         ("Hero Section", {"fields": ("hero_badge", "hero_title_prefix", "hero_title_highlight", "hero_description")}),
         ("Who We Are (Home)", {"fields": (
             "who_badge", "who_title", "who_title_highlight", "who_text",
