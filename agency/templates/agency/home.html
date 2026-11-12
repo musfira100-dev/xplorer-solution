@@ -280,6 +280,7 @@
 </section>
 {% endif %}
 
+{% comment %}
 <!-- Testimonials Slider -->
 {% if testimonials %}
 <section class="py-20 bg-slate-50 relative overflow-hidden">
@@ -307,6 +308,7 @@
     </div>
 </section>
 {% endif %}
+{% endcomment %}
 
 <!-- Clients -->
 {% if client_logos %}
@@ -411,9 +413,11 @@
 {% endblock %}
 
 {% block scripts %}
+{% comment %}
 {% if testimonials %}
 {{ testimonial_data|json_script:"testimonial-data" }}
 {% endif %}
+{% endcomment %}
 <script>
     // Tabs
     function switchTab(tabId) {
@@ -437,6 +441,7 @@
         icon.classList.toggle('fa-minus');
     }
 
+    /* Testimonial slider (commented out)
     // Testimonial slider (data comes from the admin panel)
     (function () {
         const el = document.getElementById('testimonial-data');
@@ -457,6 +462,7 @@
         window.prevTestimonial = function () { idx = (idx - 1 + data.length) % data.length; render(); };
         render();
     })();
+    */
 
     // Estimator (prices come from Site Settings in the admin panel)
     const EST = {
