@@ -9,7 +9,7 @@ def site_context(request):
             ("services", "Services", "/services/"),
             ("portfolio", "Projects", "/projects/"),
             ("about", "About Us", "/about/"),
-            ("testimonials", "Testimonials", "/testimonials/"),
+            # ("testimonials", "Testimonials", "/testimonials/"),
             ("blog", "Blog", "/blog/"),
             ("contact", "Contact", "/contact/"),
         ],

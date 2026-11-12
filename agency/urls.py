@@ -13,7 +13,7 @@ urlpatterns = [
     path("projects/<int:pk>/<slug:slug>/", views.project_detail, name="project_detail"),
     path("portfolio/", RedirectView.as_view(pattern_name="portfolio", permanent=True)),
     path("about/", views.about, name="about"),
-    path("testimonials/", views.testimonials, name="testimonials"),
+    # path("testimonials/", views.testimonials, name="testimonials"),
     path("blog/", views.blog_list, name="blog"),
     path("blog/<slug:slug>/", views.blog_detail, name="blog_detail"),
     path("contact/", views.contact, name="contact"),
