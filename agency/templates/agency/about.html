@@ -37,11 +37,12 @@
             .ab-name.ab-sm { font-size: clamp(1.5rem, 2.6vw, 2rem); }
             .ab-word { display: inline-block; white-space: nowrap; overflow: hidden; vertical-align: top; padding: 0 .04em .14em; margin-bottom: -.1em; }
             .ab-word + .ab-word { margin-left: .22em; }
-            .ab-ch { display: inline-block; background: linear-gradient(135deg, rgb(var(--brand-600)) 0%, rgb(var(--brand-400)) 55%, rgb(var(--brand-800)) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+            .ab-ch { display: inline-block; color: #0f172a; }
+            html.dark .ab-ch { color: #fff; }
             .ab-line { display: block; height: 3px; width: 4.5rem; margin: .95rem 0 .85rem; border-radius: 9999px; background: linear-gradient(90deg, rgb(var(--brand-500)), rgb(var(--brand-300) / 0)); transform-origin: left; }
-            .ab-role { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .65rem; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .22em; color: rgb(var(--brand-600)); }
+            .ab-role { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .65rem; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .22em; color: #0f172a; }
             .ab-role::before { content: ""; width: .5rem; height: .5rem; border-radius: 9999px; background: rgb(var(--brand-500)); animation: abPulse 2.6s ease-out infinite; }
-            html.dark .ab-role { color: rgb(var(--brand-400)); }
+            html.dark .ab-role { color: #fff; }
             @keyframes abPulse { 0% { box-shadow: 0 0 0 0 rgb(var(--brand-500) / .55); } 70%, 100% { box-shadow: 0 0 0 .65rem rgb(var(--brand-500) / 0); } }
 
             .ab-media { position: relative; }
