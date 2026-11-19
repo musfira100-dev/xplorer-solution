@@ -9,23 +9,136 @@
             <p class="text-sm text-slate-600 mt-4">{{ site.about_intro }}</p>
         </div>
 
-        <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-slate-200 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <h3 class="text-2xl font-bold text-slate-900">{{ site.about_subheading }}</h3>
-                <p class="text-xs sm:text-sm text-slate-600 mt-4 leading-relaxed">{{ site.about_paragraph_1 }}</p>
-                <p class="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">{{ site.about_paragraph_2 }}</p>
+        <div class="ab-card glass-panel p-8 sm:p-12 rounded-3xl border border-slate-200 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" id="abCard">
+            <div class="ab-copy">
+                <h3 class="ab-title text-2xl font-bold text-slate-900" id="abTitle">{{ site.about_subheading }}</h3>
+                <p class="ab-fade text-xs sm:text-sm text-slate-600 mt-4 leading-relaxed" style="--k:0">{{ site.about_paragraph_1 }}</p>
+                <p class="ab-fade text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed" style="--k:1">{{ site.about_paragraph_2 }}</p>
             </div>
-            <div>
-                {% if site.about_image %}
-                <img src="{{ site.about_image.url }}" alt="Our team" class="rounded-2xl shadow-xl w-full aspect-[3/2] object-cover">
-                {% else %}
-                <div class="rounded-2xl purple-bg-gradient w-full aspect-[3/2] flex flex-col items-center justify-center text-white/90 shadow-xl">
-                    <i class="fa-solid fa-users text-5xl mb-3"></i>
-                    <span class="text-xs font-semibold">Upload a team photo from Admin &rarr; Site Settings</span>
+            <div class="ab-media rounded-2xl shadow-xl">
+                <div class="ab-img rounded-2xl overflow-hidden">
+                    {% if site.about_image %}
+                    <img src="{{ site.about_image.url }}" alt="Our team" class="w-full aspect-[3/2] object-cover">
+                    {% else %}
+                    <div class="purple-bg-gradient w-full aspect-[3/2] flex flex-col items-center justify-center text-white/90">
+                        <i class="fa-solid fa-users text-5xl mb-3"></i>
+                        <span class="text-xs font-semibold">Upload a team photo from Admin &rarr; Site Settings</span>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
         </div>
+
+        <style>
+            /* About card: name rises letter by letter, then role, then text, then photo.
+               Everything below only applies once the script adds .ab-ready, so the page is
+               fully visible without JavaScript. */
+            .ab-name { display: block; font-weight: 800; line-height: 1.08; letter-spacing: -.02em; font-size: clamp(2rem, 4.4vw, 3.4rem); }
+            .ab-name.ab-sm { font-size: clamp(1.5rem, 2.6vw, 2rem); }
+            .ab-word { display: inline-block; white-space: nowrap; overflow: hidden; vertical-align: top; padding: 0 .04em .14em; margin-bottom: -.1em; }
+            .ab-word + .ab-word { margin-left: .22em; }
+            .ab-ch { display: inline-block; background: linear-gradient(135deg, rgb(var(--brand-600)) 0%, rgb(var(--brand-400)) 55%, rgb(var(--brand-800)) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+            .ab-line { display: block; height: 3px; width: 4.5rem; margin: .95rem 0 .85rem; border-radius: 9999px; background: linear-gradient(90deg, rgb(var(--brand-500)), rgb(var(--brand-300) / 0)); transform-origin: left; }
+            .ab-role { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .65rem; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .22em; color: rgb(var(--brand-600)); }
+            .ab-role::before { content: ""; width: .5rem; height: .5rem; border-radius: 9999px; background: rgb(var(--brand-500)); animation: abPulse 2.6s ease-out infinite; }
+            html.dark .ab-role { color: rgb(var(--brand-400)); }
+            @keyframes abPulse { 0% { box-shadow: 0 0 0 0 rgb(var(--brand-500) / .55); } 70%, 100% { box-shadow: 0 0 0 .65rem rgb(var(--brand-500) / 0); } }
+
+            .ab-media { position: relative; }
+            .ab-media::before { content: ""; position: absolute; inset: 0; border-radius: 1rem; border: 2px solid rgb(var(--brand-400) / .55); transform: translate(14px, 14px); pointer-events: none; }
+            .ab-img img, .ab-img > div { display: block; }
+
+            .ab-ready .ab-ch { transform: translateY(118%) rotate(7deg); opacity: 0; filter: blur(8px); }
+            .ab-ready .ab-line { transform: scaleX(0); }
+            .ab-ready .ab-role { opacity: 0; letter-spacing: .55em; filter: blur(6px); }
+            .ab-ready .ab-fade { opacity: 0; transform: translateY(18px); }
+            .ab-ready .ab-img { clip-path: inset(0 100% 0 0 round 1rem); }
+            .ab-ready .ab-img img, .ab-ready .ab-img > div { transform: scale(1.18); }
+            .ab-ready .ab-media::before { opacity: 0; transform: translate(0, 0); }
+
+            .ab-in .ab-ch { animation: abRise .85s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.2s + var(--i) * .055s); }
+            .ab-in .ab-line { animation: abLine .8s cubic-bezier(.65, 0, .25, 1) both; animation-delay: var(--nd); }
+            .ab-in .ab-role { animation: abRole 1s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--nd) + .35s); }
+            .ab-in .ab-fade { animation: abFade .8s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--nd) + .85s + var(--k) * .16s); }
+            .ab-in .ab-img { animation: abWipe 1.2s cubic-bezier(.77, 0, .18, 1) both; animation-delay: calc(var(--nd) + .3s); }
+            .ab-in .ab-img img, .ab-in .ab-img > div { animation: abZoom 1.8s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--nd) + .3s); }
+            .ab-in .ab-media::before { animation: abFrame .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--nd) + 1.2s); }
+
+            @keyframes abRise { to { transform: none; opacity: 1; filter: none; } }
+            @keyframes abLine { to { transform: scaleX(1); } }
+            @keyframes abRole { to { opacity: 1; letter-spacing: .22em; filter: none; } }
+            @keyframes abFade { to { opacity: 1; transform: none; } }
+            @keyframes abWipe { to { clip-path: inset(0 0 0 0 round 1rem); } }
+            @keyframes abZoom { to { transform: scale(1); } }
+            @keyframes abFrame { to { opacity: 1; transform: translate(14px, 14px); } }
+
+            @media (max-width: 640px) { .ab-media::before { transform: translate(8px, 8px); } @keyframes abFrame { to { opacity: 1; transform: translate(8px, 8px); } } }
+            @media (prefers-reduced-motion: reduce) {
+                .ab-ready .ab-ch, .ab-ready .ab-line, .ab-ready .ab-role, .ab-ready .ab-fade, .ab-ready .ab-img,
+                .ab-ready .ab-img img, .ab-ready .ab-img > div, .ab-ready .ab-media::before { opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important; animation: none !important; }
+                .ab-role { letter-spacing: .22em !important; }
+                .ab-media::before { transform: translate(14px, 14px) !important; }
+            }
+        </style>
+        <script>
+        (function () {
+            try {
+                var card = document.getElementById('abCard');
+                var title = document.getElementById('abTitle');
+                if (!card || !title) return;
+                var raw = title.textContent.replace(/\s+/g, ' ').trim();
+                var words = raw.split(' ');
+                var name = raw, role = '';
+                // "Ceo and Founder Darwaish Ahmad": last two words are the name, the rest is the role
+                if (words.length >= 3 && /\b(ceo|founder|co-?founder|director|manager|head|lead|owner|chief|president|designer|developer|engineer)\b/i.test(words.slice(0, -2).join(' '))) {
+                    name = words.slice(-2).join(' ');
+                    role = words.slice(0, -2).join(' ');
+                }
+                var n = 0;
+                var nameEl = document.createElement('span');
+                nameEl.className = 'ab-name' + (name.length > 26 ? ' ab-sm' : '');
+                nameEl.setAttribute('aria-hidden', 'true');
+                name.split(' ').forEach(function (w) {
+                    var wEl = document.createElement('span');
+                    wEl.className = 'ab-word';
+                    w.split('').forEach(function (c) {
+                        var ch = document.createElement('span');
+                        ch.className = 'ab-ch';
+                        ch.style.setProperty('--i', n++);
+                        ch.textContent = c;
+                        wEl.appendChild(ch);
+                    });
+                    nameEl.appendChild(wEl);
+                });
+                title.textContent = '';
+                title.setAttribute('aria-label', raw);
+                title.appendChild(nameEl);
+                var line = document.createElement('span');
+                line.className = 'ab-line';
+                line.setAttribute('aria-hidden', 'true');
+                title.appendChild(line);
+                if (role) {
+                    var roleEl = document.createElement('span');
+                    roleEl.className = 'ab-role';
+                    roleEl.setAttribute('aria-hidden', 'true');
+                    roleEl.textContent = role;
+                    title.appendChild(roleEl);
+                }
+                card.style.setProperty('--nd', (0.2 + n * 0.055 + 0.55).toFixed(2) + 's');
+                card.classList.add('ab-ready');
+                var go = function () { card.classList.add('ab-in'); };
+                if ('IntersectionObserver' in window) {
+                    var io = new IntersectionObserver(function (es) {
+                        if (es.some(function (e) { return e.isIntersecting; })) { go(); io.disconnect(); }
+                    }, { threshold: 0.3 });
+                    io.observe(card);
+                } else { go(); }
+            } catch (err) {
+                var c = document.getElementById('abCard');
+                if (c) { c.classList.remove('ab-ready'); }
+            }
+        })();
+        </script>
 
         {% if team %}
         <div class="text-center max-w-2xl mx-auto mt-20 mb-12">
